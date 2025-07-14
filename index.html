@@ -1,96 +1,98 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Options Calculator – Long Call, Put, Bull & Bear Spreads</title>
+  <title>Options Strategy Calculator</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #121212;
-      color: #e0e0e0;
-      margin: 0;
-      padding: 20px;
-    }
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #121212;
+  color: #e0e0e0;
+  margin: 0;
+  padding: 10px;
+}
+h2, h3 {
+  color: #f0f0f0;
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.container {
+  max-width: 1000px;
+  margin: auto;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 12px;
+}
+label {
+  margin-top: 5px;
+  display: block;
+  font-weight: 500;
+  font-size: 13px;
+}
+input, select {
+  width: 100%;
+  padding: 6px;
+  font-size: 13px;
+  margin-top: 3px;
+  border: none;
+  border-radius: 4px;
+  background-color: #2e2e2e;
+  color: #f0f0f0;
+}
+button {
+  margin-top: 12px;
+  padding: 8px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  width: 100%;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0056b3;
+}
+.output {
+  margin-top: 20px;
+  background-color: #1b1b1b;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 5px solid #007bff;
+}
+.output p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+pre {
+  background-color: #2a2a2a;
+  padding: 10px;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #e0e0e0;
+}
+h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
 
-    h2, h3 {
-      color: #f0f0f0;
-      text-align: center;
-    }
-
-    .container {
-      max-width: 950px;
-      margin: auto;
-      background-color: #1e1e1e;
-      border-radius: 10px;
-      padding: 25px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    label {
-      margin-top: 10px;
-      display: block;
-      font-weight: bold;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border: none;
-      border-radius: 6px;
-      background-color: #2e2e2e;
-      color: #f0f0f0;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 12px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      width: 100%;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    .output {
-      margin-top: 30px;
-      background-color: #1b1b1b;
-      padding: 20px;
-      border-radius: 10px;
-      border-left: 6px solid #007bff;
-    }
-
-    .output p {
-      margin: 10px 0;
-    }
-
-    pre {
-      background-color: #2a2a2a;
-      padding: 12px;
-      border-radius: 6px;
-      white-space: pre-wrap;
-      margin-top: 10px;
-      color: #e0e0e0;
-    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>📈 Options Strategy Calculator – Long, Spread, Smart Exit 💡</h2>
-
+    <h2>📈 Options Strategy Calculator – Powered for Smart Traders 🚀</h2>
     <div class="grid">
       <div>
         <label>Stock Name</label>
@@ -119,66 +121,112 @@
           <option value="longPut">Long Put</option>
           <option value="bullCallSpread">Bull Call Spread</option>
           <option value="bearPutSpread">Bear Put Spread</option>
+          <option value="longStrangle">Long Strangle</option>
+          <option value="longStraddle">Long Straddle</option>
         </select>
       </div>
+      <div>
+        <!-- Strategy Input Forms -->
 
-      <div id="longCallFields" style="display:none">
-        <h3>🔧 Long Call Inputs</h3>
-        <label>Strike Price</label>
-        <input type="number" id="longCallStrike">
-        <label>Premium Paid</label>
-        <input type="number" id="longCallPremium">
-        <label>Current Option LTP</label>
-        <input type="number" id="longCallLTP">
-        <button onclick="calculateLongCall()">Calculate</button>
+        <div id="longCallFields" style="display:none">
+          <h3>🔧 Long Call Inputs</h3>
+          <label>Strike Price</label>
+          <input type="number" id="longCallStrike">
+          <label>Premium Paid</label>
+          <input type="number" id="longCallPremium">
+          <label>Current Option LTP</label>
+          <input type="number" id="longCallLTP">
+          <button onclick="calculateLongCall()">Calculate</button>
+        </div>
+
+        <div id="longPutFields" style="display:none">
+          <h3>🔧 Long Put Inputs</h3>
+          <label>Strike Price</label>
+          <input type="number" id="longPutStrike">
+          <label>Premium Paid</label>
+          <input type="number" id="longPutPremium">
+          <label>Current Option LTP</label>
+          <input type="number" id="longPutLTP">
+          <button onclick="calculateLongPut()">Calculate</button>
+        </div>
+
+        <div id="bullCallSpreadFields" style="display:none">
+          <h3>📘 Bull Call Spread</h3>
+          <label>Buy Call Strike Price</label>
+          <input type="number" id="bcsBuyStrike">
+          <label>Buy Premium Paid</label>
+          <input type="number" id="bcsBuyPremium">
+          <label>Buy Option LTP</label>
+          <input type="number" id="bcsBuyLTP">
+
+          <label>Sell Call Strike Price</label>
+          <input type="number" id="bcsSellStrike">
+          <label>Sell Premium Received</label>
+          <input type="number" id="bcsSellPremium">
+          <label>Sell Option LTP</label>
+          <input type="number" id="bcsSellLTP">
+
+          <button onclick="calculateBullCallSpread()">Calculate</button>
+        </div>
+
+        <div id="bearPutSpreadFields" style="display:none">
+          <h3>📕 Bear Put Spread</h3>
+          <label>Buy Put Strike Price</label>
+          <input type="number" id="bpsBuyStrike">
+          <label>Buy Premium Paid</label>
+          <input type="number" id="bpsBuyPremium">
+          <label>Buy Option LTP</label>
+          <input type="number" id="bpsBuyLTP">
+
+          <label>Sell Put Strike Price</label>
+          <input type="number" id="bpsSellStrike">
+          <label>Sell Premium Received</label>
+          <input type="number" id="bpsSellPremium">
+          <label>Sell Option LTP</label>
+          <input type="number" id="bpsSellLTP">
+
+          <button onclick="calculateBearPutSpread()">Calculate</button>
+        </div>
+
+        <div id="longStrangleFields" style="display:none">
+          <h3>🎯 Long Strangle Inputs</h3>
+          <label>Call Strike Price</label>
+          <input type="number" id="lsCallStrike">
+          <label>Call Premium Paid</label>
+          <input type="number" id="lsCallPremium">
+          <label>Call Option LTP</label>
+          <input type="number" id="lsCallLTP">
+
+          <label>Put Strike Price</label>
+          <input type="number" id="lsPutStrike">
+          <label>Put Premium Paid</label>
+          <input type="number" id="lsPutPremium">
+          <label>Put Option LTP</label>
+          <input type="number" id="lsPutLTP">
+
+          <button onclick="calculateLongStrangle()">Calculate</button>
+        </div>
+
+        <div id="longStraddleFields" style="display:none">
+          <h3>⚔️ Long Straddle Inputs</h3>
+          <label>Strike Price (Same for Call & Put)</label>
+          <input type="number" id="lsdStrike">
+
+          <label>Call Premium Paid</label>
+          <input type="number" id="lsdCallPremium">
+          <label>Call Option LTP</label>
+          <input type="number" id="lsdCallLTP">
+
+          <label>Put Premium Paid</label>
+          <input type="number" id="lsdPutPremium">
+          <label>Put Option LTP</label>
+          <input type="number" id="lsdPutLTP">
+
+          <button onclick="calculateLongStraddle()">Calculate</button>
+        </div>
+
       </div>
-
-      <div id="longPutFields" style="display:none">
-        <h3>🔧 Long Put Inputs</h3>
-        <label>Strike Price</label>
-        <input type="number" id="longPutStrike">
-        <label>Premium Paid</label>
-        <input type="number" id="longPutPremium">
-        <label>Current Option LTP</label>
-        <input type="number" id="longPutLTP">
-        <button onclick="calculateLongPut()">Calculate</button>
-      </div>
-
-      <div id="bullCallSpreadFields" style="display:none">
-        <h3>🧮 Bull Call Spread Inputs</h3>
-        <label>Buy Call Strike Price</label>
-        <input type="number" id="bcsBuyStrike">
-        <label>Buy Premium Paid</label>
-        <input type="number" id="bcsBuyPremium">
-        <label>Buy Option LTP</label>
-        <input type="number" id="bcsBuyLTP">
-        <label>Sell Call Strike Price</label>
-        <input type="number" id="bcsSellStrike">
-        <label>Sell Premium Received</label>
-        <input type="number" id="bcsSellPremium">
-        <label>Sell Option LTP</label>
-        <input type="number" id="bcsSellLTP">
-        <button onclick="calculateBullCallSpread()">Calculate</button>
-      </div>
-
-      <div id="bearPutSpreadFields" style="display:none">
-        <h3>🧮 Bear Put Spread Inputs</h3>
-        <label>Buy Put Strike Price</label>
-        <input type="number" id="bpsBuyStrike">
-        <label>Buy Premium Paid</label>
-        <input type="number" id="bpsBuyPremium">
-        <label>Buy Option LTP</label>
-        <input type="number" id="bpsBuyLTP">
-        <label>Sell Put Strike Price</label>
-        <input type="number" id="bpsSellStrike">
-        <label>Sell Premium Received</label>
-        <input type="number" id="bpsSellPremium">
-        <label>Sell Option LTP</label>
-        <input type="number" id="bpsSellLTP">
-        <button onclick="calculateBearPutSpread()">Calculate</button>
-      </div>
-    </div>
-
+    </div> <!-- End of .grid -->
     <div class="output">
       <h3>📊 Output</h3>
       <p><strong>Breakeven Point:</strong> <span id="breakeven">--</span></p>
@@ -192,15 +240,13 @@
     </div>
 
     <button onclick="resetCalculator()" style="background-color: #6c757d;">🔄 Reset Calculator</button>
-  </div>
-
+  </div> <!-- End of .container -->
 <script>
 function toggleStrategyFields() {
   const strategy = document.getElementById("strategyType").value;
-  document.getElementById("longCallFields").style.display = strategy === "longCall" ? "block" : "none";
-  document.getElementById("longPutFields").style.display = strategy === "longPut" ? "block" : "none";
-  document.getElementById("bullCallSpreadFields").style.display = strategy === "bullCallSpread" ? "block" : "none";
-  document.getElementById("bearPutSpreadFields").style.display = strategy === "bearPutSpread" ? "block" : "none";
+  const allFields = ["longCallFields", "longPutFields", "bullCallSpreadFields", "bearPutSpreadFields", "longStrangleFields", "longStraddleFields"];
+  allFields.forEach(id => document.getElementById(id).style.display = "none");
+  if (strategy) document.getElementById(strategy + "Fields").style.display = "block";
 }
 
 function calculateDTE() {
@@ -210,166 +256,106 @@ function calculateDTE() {
   document.getElementById("dte").innerText = diff > 0 ? diff : 0;
 }
 
-function calculateLongCall() {
-  const strike = parseFloat(document.getElementById("longCallStrike").value);
-  const premium = parseFloat(document.getElementById("longCallPremium").value);
-  const ltp = parseFloat(document.getElementById("longCallLTP").value);
-  const spot = parseFloat(document.getElementById("spotPrice").value);
-  const lotSize = parseInt(document.getElementById("lotSize").value);
-  const noOfLots = parseInt(document.getElementById("noOfLots").value);
-  const risk = parseFloat(document.getElementById("maxRisk").value);
-  const dte = parseInt(document.getElementById("dte").innerText);
-  const totalQty = lotSize * noOfLots;
-
-  if ([strike, premium, ltp, spot, lotSize, noOfLots, risk].some(isNaN)) {
-    alert("⚠️ Please fill in all required fields.");
-    return;
-  }
-
-  const cost = premium * totalQty;
-  const pnl = (ltp - premium) * totalQty;
-  const roi = ((pnl / cost) * 100).toFixed(2) + "%";
-  const breakeven = strike + premium;
-  const targetProfit = cost;
-
-  updateOutput(breakeven, "Unlimited", cost, roi, pnl, targetProfit, getSmartExitMessage(pnl, risk, targetProfit, dte, spot, strike, "call"));
+function getQty() {
+  return +document.getElementById("lotSize").value * +document.getElementById("noOfLots").value;
 }
 
-function calculateLongPut() {
-  const strike = parseFloat(document.getElementById("longPutStrike").value);
-  const premium = parseFloat(document.getElementById("longPutPremium").value);
-  const ltp = parseFloat(document.getElementById("longPutLTP").value);
-  const spot = parseFloat(document.getElementById("spotPrice").value);
-  const lotSize = parseInt(document.getElementById("lotSize").value);
-  const noOfLots = parseInt(document.getElementById("noOfLots").value);
-  const risk = parseFloat(document.getElementById("maxRisk").value);
-  const dte = parseInt(document.getElementById("dte").innerText);
-  const totalQty = lotSize * noOfLots;
-
-  if ([strike, premium, ltp, spot, lotSize, noOfLots, risk].some(isNaN)) {
-    alert("⚠️ Please fill in all required fields.");
-    return;
-  }
-
-  const cost = premium * totalQty;
-  const pnl = (ltp - premium) * totalQty;
-  const roi = ((pnl / cost) * 100).toFixed(2) + "%";
-  const breakeven = strike - premium;
-  const targetProfit = cost;
-
-  updateOutput(breakeven, "Unlimited", cost, roi, pnl, targetProfit, getSmartExitMessage(pnl, risk, targetProfit, dte, spot, strike, "put"));
+function getSmartExitMessage(pnl, risk, target, dte, spot, strike, type) {
+  const pct = (pnl / target) * 100;
+  if (pnl >= target) return "✅ Book Profit 🎯\nTarget hit. Trail SL or book full.";
+  if (pnl <= -risk) return "❌ Book Loss 🛑\nMax loss exceeded.";
+  if (dte < 2 && ((type === "call" && spot < strike) || (type === "put" && spot > strike))) return "⏱️ Exit or Roll\nTheta decay risk near expiry.";
+  if ((type === "call" && spot > strike * 1.05) || (type === "put" && spot < strike * 0.95)) return "⚠️ Hold with Caution\nPossible breakout in progress.";
+  if (pnl > 0 && pnl >= 0.5 * risk && pnl < target * 0.5) return "📈 Momentum Building\nWatch for partial exit.";
+  if (pct >= 50 && pct < 100) return "🟡 Partial Profit Zone\nTrail stop or lock partial gains.";
+  return "🟢 Hold\nNo exit signal yet.";
 }
 
-function calculateBullCallSpread() {
-  const buyStrike = parseFloat(document.getElementById("bcsBuyStrike").value);
-  const buyPremium = parseFloat(document.getElementById("bcsBuyPremium").value);
-  const buyLTP = parseFloat(document.getElementById("bcsBuyLTP").value);
-  const sellStrike = parseFloat(document.getElementById("bcsSellStrike").value);
-  const sellPremium = parseFloat(document.getElementById("bcsSellPremium").value);
-  const sellLTP = parseFloat(document.getElementById("bcsSellLTP").value);
-  const spot = parseFloat(document.getElementById("spotPrice").value);
-  const lotSize = parseInt(document.getElementById("lotSize").value);
-  const noOfLots = parseInt(document.getElementById("noOfLots").value);
-  const risk = parseFloat(document.getElementById("maxRisk").value);
-  const dte = parseInt(document.getElementById("dte").innerText);
-  const totalQty = lotSize * noOfLots;
-
-  if ([buyStrike, buyPremium, buyLTP, sellStrike, sellPremium, sellLTP, spot, lotSize, noOfLots, risk].some(isNaN)) {
-    alert("⚠️ Please fill in all required fields for Bull Call Spread.");
-    return;
-  }
-
-  const netPremium = buyPremium - sellPremium;
-  const cost = netPremium * totalQty;
-  const breakeven = buyStrike + netPremium;
-  const maxProfit = (sellStrike - buyStrike - netPremium) * totalQty;
-  const pnl = ((buyLTP - buyPremium) - (sellLTP - sellPremium)) * totalQty;
-  const roi = ((pnl / cost) * 100).toFixed(2) + "%";
-  const targetProfit = maxProfit;
-
-  updateOutput(breakeven, maxProfit.toFixed(2), cost, roi, pnl, targetProfit, getSmartExitMessage(pnl, risk, targetProfit, dte, spot, buyStrike, "callSpread"));
-}
-
-function calculateBearPutSpread() {
-  const buyStrike = parseFloat(document.getElementById("bpsBuyStrike").value);
-  const buyPremium = parseFloat(document.getElementById("bpsBuyPremium").value);
-  const buyLTP = parseFloat(document.getElementById("bpsBuyLTP").value);
-  const sellStrike = parseFloat(document.getElementById("bpsSellStrike").value);
-  const sellPremium = parseFloat(document.getElementById("bpsSellPremium").value);
-  const sellLTP = parseFloat(document.getElementById("bpsSellLTP").value);
-  const spot = parseFloat(document.getElementById("spotPrice").value);
-  const lotSize = parseInt(document.getElementById("lotSize").value);
-  const noOfLots = parseInt(document.getElementById("noOfLots").value);
-  const risk = parseFloat(document.getElementById("maxRisk").value);
-  const dte = parseInt(document.getElementById("dte").innerText);
-  const totalQty = lotSize * noOfLots;
-
-  if ([buyStrike, buyPremium, buyLTP, sellStrike, sellPremium, sellLTP, spot, lotSize, noOfLots, risk].some(isNaN)) {
-    alert("⚠️ Please fill in all required fields for Bear Put Spread.");
-    return;
-  }
-
-  const netPremium = buyPremium - sellPremium;
-  const cost = netPremium * totalQty;
-  const breakeven = buyStrike - netPremium;
-  const maxProfit = (buyStrike - sellStrike - netPremium) * totalQty;
-  const pnl = ((buyLTP - buyPremium) - (sellLTP - sellPremium)) * totalQty;
-  const roi = ((pnl / cost) * 100).toFixed(2) + "%";
-  const targetProfit = maxProfit;
-
-  updateOutput(breakeven, maxProfit.toFixed(2), cost, roi, pnl, targetProfit, getSmartExitMessage(pnl, risk, targetProfit, dte, spot, buyStrike, "putSpread"));
-}
-
-function updateOutput(breakeven, maxProfit, maxLoss, roi, pnl, targetProfit, exitMessage) {
-  document.getElementById("breakeven").innerText = breakeven.toFixed(2);
+function updateOutput(breakeven, maxProfit, maxLoss, roi, pnl, target, exitMsg) {
+  document.getElementById("breakeven").innerText = breakeven;
   document.getElementById("maxProfit").innerText = maxProfit;
   document.getElementById("maxLoss").innerText = maxLoss.toFixed(2);
   document.getElementById("roi").innerText = roi;
   document.getElementById("pnl").innerText = pnl.toFixed(2);
-  document.getElementById("targetAuto").innerText = targetProfit.toFixed(2);
-  document.getElementById("exitSuggestion").innerText = exitMessage;
+  document.getElementById("targetAuto").innerText = target.toFixed(2);
+  document.getElementById("exitSuggestion").innerText = exitMsg;
+  document.getElementById("roi").style.color = pnl >= 0 ? "#4caf50" : "#f44336";
+  document.getElementById("pnl").style.color = pnl >= 0 ? "#4caf50" : "#f44336";
 }
 
-function getSmartExitMessage(pnl, risk, targetProfit, dte, spot, strike, type) {
-  const pnlPctOfTarget = (pnl / targetProfit) * 100;
-  let suggestion = "";
+function calculateLongCall() {
+  const strike = +document.getElementById("longCallStrike").value;
+  const premium = +document.getElementById("longCallPremium").value;
+  const ltp = +document.getElementById("longCallLTP").value;
+  const qty = getQty(), spot = +document.getElementById("spotPrice").value, risk = +document.getElementById("maxRisk").value, dte = +document.getElementById("dte").innerText;
+  const cost = premium * qty, pnl = (ltp - premium) * qty, roi = ((pnl / cost) * 100).toFixed(2) + "%", breakeven = strike + premium;
+  updateOutput(breakeven.toFixed(2), "Unlimited", cost, roi, pnl, cost, getSmartExitMessage(pnl, risk, cost, dte, spot, strike, "call"));
+}
 
-  if (pnl >= targetProfit) {
-    suggestion = "✅ Book Profit 🎯\nTarget achieved. Consider trailing SL or partial booking.";
-  } else if (pnl <= -risk) {
-    suggestion = "❌ Book Loss 🛑\nMax loss breached. Respect discipline and exit.";
-  } else if (dte < 2 && ((type === "call" && spot < strike) || (type === "put" && spot > strike))) {
-    suggestion = "⏱️ Exit or Roll\nTheta risk high near expiry. Consider rolling or closing.";
-  } else if ((type === "call" && spot > strike * 1.05) || (type === "put" && spot < strike * 0.95)) {
-    suggestion = "⚠️ Hold with Caution\nBreakout in progress. Trail SL or review Greeks.";
-  } else if (pnl > 0 && pnl >= 0.5 * risk && pnl < targetProfit * 0.5) {
-    suggestion = "📈 Gaining Momentum\nProfit crossed 50% of your risk threshold. Consider partial exit or trailing stop.";
-  } else if (pnlPctOfTarget >= 50 && pnlPctOfTarget < 100) {
-    suggestion = "🟡 Partial Booking Opportunity\nStrong momentum. Consider partial exit.";
-  } else {
-    suggestion = "🟢 Hold\nWithin range. No action needed yet.";
-  }
+function calculateLongPut() {
+  const strike = +document.getElementById("longPutStrike").value;
+  const premium = +document.getElementById("longPutPremium").value;
+  const ltp = +document.getElementById("longPutLTP").value;
+  const qty = getQty(), spot = +document.getElementById("spotPrice").value, risk = +document.getElementById("maxRisk").value, dte = +document.getElementById("dte").innerText;
+  const cost = premium * qty, pnl = (ltp - premium) * qty, roi = ((pnl / cost) * 100).toFixed(2) + "%", breakeven = strike - premium;
+  updateOutput(breakeven.toFixed(2), "Unlimited", cost, roi, pnl, cost, getSmartExitMessage(pnl, risk, cost, dte, spot, strike, "put"));
+}
 
-  return suggestion;
+function calculateBullCallSpread() {
+  const bStrike = +document.getElementById("bcsBuyStrike").value;
+  const bPremium = +document.getElementById("bcsBuyPremium").value;
+  const bLTP = +document.getElementById("bcsBuyLTP").value;
+  const sStrike = +document.getElementById("bcsSellStrike").value;
+  const sPremium = +document.getElementById("bcsSellPremium").value;
+  const sLTP = +document.getElementById("bcsSellLTP").value;
+  const qty = getQty(), spot = +document.getElementById("spotPrice").value, risk = +document.getElementById("maxRisk").value, dte = +document.getElementById("dte").innerText;
+  const cost = (bPremium - sPremium) * qty, pnl = ((bLTP - bPremium) - (sLTP - sPremium)) * qty;
+  const maxProfit = (sStrike - bStrike - (bPremium - sPremium)) * qty;
+  const roi = ((pnl / cost) * 100).toFixed(2) + "%", breakeven = bStrike + (bPremium - sPremium);
+  updateOutput(breakeven.toFixed(2), maxProfit.toFixed(2), cost, roi, pnl, cost, getSmartExitMessage(pnl, risk, cost, dte, spot, bStrike, "call"));
+}
+
+function calculateBearPutSpread() {
+  const bStrike = +document.getElementById("bpsBuyStrike").value;
+  const bPremium = +document.getElementById("bpsBuyPremium").value;
+  const bLTP = +document.getElementById("bpsBuyLTP").value;
+  const sStrike = +document.getElementById("bpsSellStrike").value;
+  const sPremium = +document.getElementById("bpsSellPremium").value;
+  const sLTP = +document.getElementById("bpsSellLTP").value;
+  const qty = getQty(), spot = +document.getElementById("spotPrice").value, risk = +document.getElementById("maxRisk").value, dte = +document.getElementById("dte").innerText;
+  const cost = (bPremium - sPremium) * qty, pnl = ((bLTP - bPremium) - (sLTP - sPremium)) * qty;
+  const maxProfit = (bStrike - sStrike - (bPremium - sPremium)) * qty;
+  const roi = ((pnl / cost) * 100).toFixed(2) + "%", breakeven = bStrike - (bPremium - sPremium);
+  updateOutput(breakeven.toFixed(2), maxProfit.toFixed(2), cost, roi, pnl, cost, getSmartExitMessage(pnl, risk, cost, dte, spot, bStrike, "put"));
+}
+
+function calculateLongStrangle() {
+  const cStrike = +document.getElementById("lsCallStrike").value, cPrem = +document.getElementById("lsCallPremium").value, cLTP = +document.getElementById("lsCallLTP").value;
+  const pStrike = +document.getElementById("lsPutStrike").value, pPrem = +document.getElementById("lsPutPremium").value, pLTP = +document.getElementById("lsPutLTP").value;
+  const qty = getQty(), spot = +document.getElementById("spotPrice").value, risk = +document.getElementById("maxRisk").value, dte = +document.getElementById("dte").innerText;
+  const cost = (cPrem + pPrem) * qty, pnl = ((cLTP - cPrem) + (pLTP - pPrem)) * qty, roi = ((pnl / cost) * 100).toFixed(2) + "%";
+  const lower = pStrike - pPrem, upper = cStrike + cPrem, breakeven = `Below ${lower.toFixed(2)} or Above ${upper.toFixed(2)}`;
+  updateOutput(breakeven, "Unlimited", cost, roi, pnl, cost * 1.5, getSmartExitMessage(pnl, risk, cost * 1.5, dte, spot, cStrike, "strangle"));
+}
+
+function calculateLongStraddle() {
+  const strike = +document.getElementById("lsdStrike").value;
+  const cPrem = +document.getElementById("lsdCallPremium").value, cLTP = +document.getElementById("lsdCallLTP").value;
+  const pPrem = +document.getElementById("lsdPutPremium").value, pLTP = +document.getElementById("lsdPutLTP").value;
+  const qty = getQty(), spot = +document.getElementById("spotPrice").value, risk = +document.getElementById("maxRisk").value, dte = +document.getElementById("dte").innerText;
+  const cost = (cPrem + pPrem) * qty, pnl = ((cLTP - cPrem) + (pLTP - pPrem)) * qty;
+  const roi = ((pnl / cost) * 100).toFixed(2) + "%";
+  const lower = strike - (cPrem + pPrem), upper = strike + (cPrem + pPrem), breakeven = `Below ${lower.toFixed(2)} or Above ${upper.toFixed(2)}`;
+  updateOutput(breakeven, "Unlimited", cost, roi, pnl, cost * 1.5, getSmartExitMessage(pnl, risk, cost * 1.5, dte, spot, strike, "straddle"));
 }
 
 function resetCalculator() {
-  document.querySelectorAll("input").forEach(input => {
-    input.value = "";
-    input.style.border = "none";
-  });
+  document.querySelectorAll("input").forEach(el => { el.value = ""; el.style.border = "none"; });
   document.getElementById("strategyType").value = "";
   toggleStrategyFields();
-  updateOutput(0, "--", 0, "--", 0, 0, "--");
+  updateOutput("--", "--", 0, "--", 0, 0, "--");
   document.getElementById("dte").innerText = "0";
 }
-
-const updateOutputBackup = updateOutput;
-updateOutput = function (...args) {
-  document.getElementById("roi").style.color = args[4] >= 0 ? "#4caf50" : "#f44336";
-  document.getElementById("pnl").style.color = args[4] >= 0 ? "#4caf50" : "#f44336";
-  updateOutputBackup(...args);
-};
 </script>
 </body>
 </html>
