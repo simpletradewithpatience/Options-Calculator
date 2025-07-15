@@ -226,16 +226,21 @@ h3 {
       </div>
     </div> <!-- End of .grid -->
     <div class="output">
-      <h3>📊 Output</h3>
-      <p><strong>Breakeven Point:</strong> <span id="breakeven">--</span></p>
-      <p><strong>Max Profit:</strong> <span id="maxProfit">--</span></p>
-      <p><strong>Max Loss (Capital Used):</strong> ₹<span id="maxLoss">--</span></p>
-      <p><strong>Theoretical ROI:</strong> <span id="roi">--</span></p>
-      <p><strong>Real-Time PnL:</strong> ₹<span id="pnl">--</span></p>
-      <p><strong>Suggested Target Profit:</strong> ₹<span id="targetAuto">--</span></p>
-      <p><strong>🧠 Smart Exit:</strong></p>
-      <pre id="exitSuggestion">--</pre>
-    </div>
+  <h3>📊 Output</h3>
+  <p><strong>Breakeven Point:</strong> <span id="breakeven">--</span></p>
+  <p><strong>Max Profit:</strong> <span id="maxProfit">--</span></p>
+  <p><strong>Max Loss (Capital Used):</strong> ₹<span id="maxLoss">--</span></p>
+  <p><strong>Theoretical ROI:</strong> <span id="roi">--</span></p>
+  <p><strong>Real-Time PnL:</strong> ₹<span id="pnl">--</span></p>
+  <p><strong>Suggested Target Profit:</strong> ₹<span id="targetAuto">--</span></p>
+
+  <!-- 🔁 Reversal Exit Level goes here -->
+  <p><strong>Reversal Exit Level:</strong> <span id="reversalExit">--</span></p>
+
+  <p><strong>🧠 Smart Exit:</strong></p>
+  <pre id="exitSuggestion">--</pre>
+</div>
+
 
     <button onclick="resetCalculator()" style="background-color: #6c757d;">🔄 Reset Calculator</button>
   </div> <!-- End of .container -->
@@ -269,6 +274,51 @@ function getSmartExitMessage(pnl, risk, target, dte, spot, strike, type) {
   return "🟢 Hold\nNo exit signal yet.";
 }
 
+function setReversalExit(strategy, strike1, spot, strike2, premium1, premium2) {
+  let level = "--";
+
+  if (strategy === "longCall") {
+    const bufferSupport = spot * 0.99;
+    const bufferStrike = strike1 - 0.25 * premium1;
+    const exitLevel = Math.min(bufferSupport, bufferStrike);
+    level = `❌ Exit if Spot < ₹${exitLevel.toFixed(2)} (invalidates long call view)`;
+  } 
+  else if (strategy === "longPut") {
+    const bufferResistance = spot * 1.01;
+    const bufferStrike = strike1 + 0.25 * premium1;
+    const exitLevel = Math.max(bufferResistance, bufferStrike);
+    level = `❌ Exit if Spot > ₹${exitLevel.toFixed(2)} (invalidates bearish view)`;
+  } 
+  else if (strategy === "bullCallSpread") {
+    const netPremium = premium1 - premium2;
+    const bufferSupport = spot * 0.99;
+    const bufferTime = strike1 - 0.25 * netPremium;
+    const exitLevel = Math.min(bufferSupport, bufferTime);
+    level = `❌ Exit if Spot < ₹${exitLevel.toFixed(2)} (bullish spread invalidation below support)`;
+  } 
+  else if (strategy === "bearPutSpread") {
+    const netPremium = premium1 - premium2;
+    const bufferResistance = spot * 1.01;
+    const bufferTime = strike1 + 0.25 * netPremium;
+    const exitLevel = Math.max(bufferResistance, bufferTime);
+    level = `❌ Exit if Spot > ₹${exitLevel.toFixed(2)} (bearish spread invalidation above resistance)`;
+  } 
+  else if (strategy === "longStraddle") {
+    const totalPremium = premium1 + premium2;
+    const buffer = totalPremium * 0.3;
+    const low = strike1 - buffer;
+    const high = strike1 + buffer;
+    level = `❌ Exit if Spot stays inside ₹${low.toFixed(2)} – ₹${high.toFixed(2)} (no breakout yet)`;
+  } 
+  else if (strategy === "longStrangle") {
+    const low = strike1 + premium1; // Put side
+    const high = strike2 - premium2; // Call side
+    level = `❌ Exit if Spot stays inside ₹${low.toFixed(2)} – ₹${high.toFixed(2)} (range-bound: no breakout yet)`;
+  }
+
+  document.getElementById("reversalExit").innerText = level;
+}
+
 function updateOutput(breakeven, maxProfit, maxLoss, roi, pnl, target, exitMsg) {
   document.getElementById("breakeven").innerText = breakeven;
   document.getElementById("maxProfit").innerText = maxProfit;
@@ -288,6 +338,7 @@ function calculateLongCall() {
   const qty = getQty(), spot = +document.getElementById("spotPrice").value, risk = +document.getElementById("maxRisk").value, dte = +document.getElementById("dte").innerText;
   const cost = premium * qty, pnl = (ltp - premium) * qty, roi = ((pnl / cost) * 100).toFixed(2) + "%", breakeven = strike + premium;
   updateOutput(breakeven.toFixed(2), "Unlimited", cost, roi, pnl, cost, getSmartExitMessage(pnl, risk, cost, dte, spot, strike, "call"));
+  setReversalExit("longCall", strike, spot, null, premium, null);
 }
 
 function calculateLongPut() {
@@ -297,6 +348,7 @@ function calculateLongPut() {
   const qty = getQty(), spot = +document.getElementById("spotPrice").value, risk = +document.getElementById("maxRisk").value, dte = +document.getElementById("dte").innerText;
   const cost = premium * qty, pnl = (ltp - premium) * qty, roi = ((pnl / cost) * 100).toFixed(2) + "%", breakeven = strike - premium;
   updateOutput(breakeven.toFixed(2), "Unlimited", cost, roi, pnl, cost, getSmartExitMessage(pnl, risk, cost, dte, spot, strike, "put"));
+  setReversalExit("longPut", strike, spot, null, premium, null); 
 }
 
 function calculateBullCallSpread() {
@@ -311,6 +363,7 @@ function calculateBullCallSpread() {
   const maxProfit = (sStrike - bStrike - (bPremium - sPremium)) * qty;
   const roi = ((pnl / cost) * 100).toFixed(2) + "%", breakeven = bStrike + (bPremium - sPremium);
   updateOutput(breakeven.toFixed(2), maxProfit.toFixed(2), cost, roi, pnl, cost, getSmartExitMessage(pnl, risk, cost, dte, spot, bStrike, "call"));
+  setReversalExit("bullCallSpread", bStrike, spot, sStrike, bPremium, sPremium);
 }
 
 function calculateBearPutSpread() {
@@ -325,6 +378,7 @@ function calculateBearPutSpread() {
   const maxProfit = (bStrike - sStrike - (bPremium - sPremium)) * qty;
   const roi = ((pnl / cost) * 100).toFixed(2) + "%", breakeven = bStrike - (bPremium - sPremium);
   updateOutput(breakeven.toFixed(2), maxProfit.toFixed(2), cost, roi, pnl, cost, getSmartExitMessage(pnl, risk, cost, dte, spot, bStrike, "put"));
+  setReversalExit("bearPutSpread", bStrike, spot, sStrike, bPremium, sPremium);
 }
 
 function calculateLongStrangle() {
@@ -334,6 +388,7 @@ function calculateLongStrangle() {
   const cost = (cPrem + pPrem) * qty, pnl = ((cLTP - cPrem) + (pLTP - pPrem)) * qty, roi = ((pnl / cost) * 100).toFixed(2) + "%";
   const lower = pStrike - pPrem, upper = cStrike + cPrem, breakeven = `Below ${lower.toFixed(2)} or Above ${upper.toFixed(2)}`;
   updateOutput(breakeven, "Unlimited", cost, roi, pnl, cost * 1.5, getSmartExitMessage(pnl, risk, cost * 1.5, dte, spot, cStrike, "strangle"));
+  setReversalExit("longStrangle", pStrike, spot, cStrike, pPrem, cPrem);
 }
 
 function calculateLongStraddle() {
@@ -345,6 +400,7 @@ function calculateLongStraddle() {
   const roi = ((pnl / cost) * 100).toFixed(2) + "%";
   const lower = strike - (cPrem + pPrem), upper = strike + (cPrem + pPrem), breakeven = `Below ${lower.toFixed(2)} or Above ${upper.toFixed(2)}`;
   updateOutput(breakeven, "Unlimited", cost, roi, pnl, cost * 1.5, getSmartExitMessage(pnl, risk, cost * 1.5, dte, spot, strike, "straddle"));
+  setReversalExit("longStraddle", strike, spot, null, cPrem, pPrem);
 }
 
 function resetCalculator() {
