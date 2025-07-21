@@ -231,6 +231,7 @@ h3 {
   <p><strong>Max Profit:</strong> <span id="maxProfit">--</span></p>
   <p><strong>Max Loss (Capital Used):</strong> ₹<span id="maxLoss">--</span></p>
   <p><strong>Theoretical ROI:</strong> <span id="roi">--</span></p>
+  <p><strong>R:R Ratio:</strong> <span id="rrRatio">--</span> <span id="rrVerdict"></span></p>
   <p><strong>Real-Time PnL:</strong> ₹<span id="pnl">--</span></p>
   <p><strong>Suggested Target Profit:</strong> ₹<span id="targetAuto">--</span></p>
 
@@ -327,6 +328,36 @@ function updateOutput(breakeven, maxProfit, maxLoss, roi, pnl, target, exitMsg) 
   document.getElementById("pnl").innerText = pnl.toFixed(2);
   document.getElementById("targetAuto").innerText = target.toFixed(2);
   document.getElementById("exitSuggestion").innerText = exitMsg;
+
+  // Calculate and display R:R
+  let rr = isFinite(maxProfit) ? (parseFloat(maxProfit) / maxLoss) : Infinity;
+  let rrRounded = isFinite(rr) ? Math.round(rr * 100) / 100 : Infinity; // round to 2 decimals
+  let rrText = isFinite(rrRounded) ? `1 : ${rrRounded}` : "1 : ∞";
+
+  let rrVerdict = "";
+  let rrColor = "";
+
+if (rr > 1.5) {
+  rrVerdict = "💎 Excellent R:R Trade";
+  rrColor = "#00e676"; // light green
+} else if (rr > 1) {
+  rrVerdict = "✅ Favourable Trade";
+  rrColor = "#4caf50"; // green
+} else {
+  rrVerdict = "⚠️ Unfavourable Trade";
+  rrColor = "#ff9800"; // orange
+}
+
+document.getElementById("rrRatio").innerText = rrText;
+document.getElementById("rrVerdict").innerText = rrVerdict;
+document.getElementById("rrVerdict").style.color = rrColor;
+
+// Optional visual on output box
+document.querySelector(".output").style.borderColor = rrColor;
+
+
+
+  // Color ROI and PnL
   document.getElementById("roi").style.color = pnl >= 0 ? "#4caf50" : "#f44336";
   document.getElementById("pnl").style.color = pnl >= 0 ? "#4caf50" : "#f44336";
 }
