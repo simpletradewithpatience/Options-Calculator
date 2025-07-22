@@ -127,101 +127,292 @@ h3 {
         <!-- Strategy Input Forms -->
 
         <div id="longCallFields" style="display:none">
-          <h3>🔧 Long Call Inputs</h3>
-          <label>Strike Price</label>
-          <input type="number" id="longCallStrike">
-          <label>Premium Paid</label>
-          <input type="number" id="longCallPremium">
-          <label>Current Option LTP</label>
-          <input type="number" id="longCallLTP">
-          <button onclick="calculateLongCall()">Calculate</button>
-        </div>
+  <h3>🔧 Long Call Inputs</h3>
+
+  <label>Strike Price</label>
+  <input type="number" id="longCallStrike">
+
+  <label>Premium Paid</label>
+  <input type="number" id="longCallPremium">
+
+  <label>Current Option LTP</label>
+  <input type="number" id="longCallLTP">
+
+  <label>Delta</label>
+  <input type="number" id="longCallDelta" step="0.01">
+
+  <label>Theta</label>
+  <input type="number" id="longCallTheta" step="0.01">
+
+  <label>Gamma</label>
+  <input type="number" id="longCallGamma" step="0.01">
+
+  <!-- 🆕 IV Input Field -->
+  <label>Implied Volatility (IV%)</label>
+  <input type="number" id="longCallIV" step="0.1" placeholder="e.g. 24.5">
+
+  <button onclick="calculateLongCall()">Calculate</button>
+</div>
+
 
         <div id="longPutFields" style="display:none">
-          <h3>🔧 Long Put Inputs</h3>
-          <label>Strike Price</label>
-          <input type="number" id="longPutStrike">
-          <label>Premium Paid</label>
-          <input type="number" id="longPutPremium">
-          <label>Current Option LTP</label>
-          <input type="number" id="longPutLTP">
-          <button onclick="calculateLongPut()">Calculate</button>
-        </div>
+  <h3>🔧 Long Put Inputs</h3>
+
+  <label>Strike Price</label>
+  <input type="number" id="longPutStrike">
+
+  <label>Premium Paid</label>
+  <input type="number" id="longPutPremium">
+
+  <label>Current Option LTP</label>
+  <input type="number" id="longPutLTP">
+
+  <label>Delta</label>
+  <input type="number" id="longPutDelta" step="0.01">
+
+  <label>Theta</label>
+  <input type="number" id="longPutTheta" step="0.01">
+
+  <label>Gamma</label>
+  <input type="number" id="longPutGamma" step="0.01">
+
+  <!-- 🆕 IV Input Field -->
+  <label>Implied Volatility (IV%)</label>
+  <input type="number" id="longPutIV" step="0.1" placeholder="e.g. 26.2">
+
+  <button onclick="calculateLongPut()">Calculate</button>
+</div>
+
 
         <div id="bullCallSpreadFields" style="display:none">
-          <h3>📘 Bull Call Spread</h3>
-          <label>Buy Call Strike Price</label>
-          <input type="number" id="bcsBuyStrike">
-          <label>Buy Premium Paid</label>
-          <input type="number" id="bcsBuyPremium">
-          <label>Buy Option LTP</label>
-          <input type="number" id="bcsBuyLTP">
+  <h3>📘 Bull Call Spread</h3>
 
-          <label>Sell Call Strike Price</label>
-          <input type="number" id="bcsSellStrike">
-          <label>Sell Premium Received</label>
-          <input type="number" id="bcsSellPremium">
-          <label>Sell Option LTP</label>
-          <input type="number" id="bcsSellLTP">
+  <!-- 🔵 Buy Leg -->
+  <label>Buy Call Strike Price</label>
+  <input type="number" id="bcsBuyStrike">
 
-          <button onclick="calculateBullCallSpread()">Calculate</button>
-        </div>
+  <label>Buy Premium Paid</label>
+  <input type="number" id="bcsBuyPremium">
+
+  <label>Buy Option LTP</label>
+  <input type="number" id="bcsBuyLTP">
+
+  <label>Buy Option Delta</label>
+  <input type="number" id="bcsBuyDelta" step="0.01">
+
+  <label>Buy Option Theta</label>
+  <input type="number" id="bcsBuyTheta" step="0.01">
+
+  <label>Buy Option Gamma</label>
+  <input type="number" id="bcsBuyGamma" step="0.01">
+
+  <!-- 🆕 Buy Leg IV -->
+  <label>Buy Option IV (%)</label>
+  <input type="number" id="bcsBuyIV" step="0.1" placeholder="e.g. 23.0">
+
+  <br><br>
+
+  <!-- 🔴 Sell Leg -->
+  <label>Sell Call Strike Price</label>
+  <input type="number" id="bcsSellStrike">
+
+  <label>Sell Premium Received</label>
+  <input type="number" id="bcsSellPremium">
+
+  <label>Sell Option LTP</label>
+  <input type="number" id="bcsSellLTP">
+
+  <label>Sell Option Delta</label>
+  <input type="number" id="bcsSellDelta" step="0.01">
+
+  <label>Sell Option Theta</label>
+  <input type="number" id="bcsSellTheta" step="0.01">
+
+  <label>Sell Option Gamma</label>
+  <input type="number" id="bcsSellGamma" step="0.01">
+
+  <!-- 🆕 Sell Leg IV -->
+  <label>Sell Option IV (%)</label>
+  <input type="number" id="bcsSellIV" step="0.1" placeholder="e.g. 21.8">
+
+  <br>
+
+  <button onclick="calculateBullCallSpread()">Calculate</button>
+</div>
+
+
 
         <div id="bearPutSpreadFields" style="display:none">
-          <h3>📕 Bear Put Spread</h3>
-          <label>Buy Put Strike Price</label>
-          <input type="number" id="bpsBuyStrike">
-          <label>Buy Premium Paid</label>
-          <input type="number" id="bpsBuyPremium">
-          <label>Buy Option LTP</label>
-          <input type="number" id="bpsBuyLTP">
+  <h3>📕 Bear Put Spread</h3>
 
-          <label>Sell Put Strike Price</label>
-          <input type="number" id="bpsSellStrike">
-          <label>Sell Premium Received</label>
-          <input type="number" id="bpsSellPremium">
-          <label>Sell Option LTP</label>
-          <input type="number" id="bpsSellLTP">
+  <!-- 🔵 Buy Put Leg -->
+  <label>Buy Put Strike Price</label>
+  <input type="number" id="bpsBuyStrike">
 
-          <button onclick="calculateBearPutSpread()">Calculate</button>
-        </div>
+  <label>Buy Premium Paid</label>
+  <input type="number" id="bpsBuyPremium">
+
+  <label>Buy Option LTP</label>
+  <input type="number" id="bpsBuyLTP">
+
+  <label>Buy Option Delta</label>
+  <input type="number" id="bpsBuyDelta" step="0.01">
+
+  <label>Buy Option Theta</label>
+  <input type="number" id="bpsBuyTheta" step="0.01">
+
+  <label>Buy Option Gamma</label>
+  <input type="number" id="bpsBuyGamma" step="0.01">
+
+  <!-- 🆕 Buy Leg IV -->
+  <label>Buy Option IV (%)</label>
+  <input type="number" id="bpsBuyIV" step="0.1" placeholder="e.g. 27.5">
+
+  <br><br>
+
+  <!-- 🔴 Sell Put Leg -->
+  <label>Sell Put Strike Price</label>
+  <input type="number" id="bpsSellStrike">
+
+  <label>Sell Premium Received</label>
+  <input type="number" id="bpsSellPremium">
+
+  <label>Sell Option LTP</label>
+  <input type="number" id="bpsSellLTP">
+
+  <label>Sell Option Delta</label>
+  <input type="number" id="bpsSellDelta" step="0.01">
+
+  <label>Sell Option Theta</label>
+  <input type="number" id="bpsSellTheta" step="0.01">
+
+  <label>Sell Option Gamma</label>
+  <input type="number" id="bpsSellGamma" step="0.01">
+
+  <!-- 🆕 Sell Leg IV -->
+  <label>Sell Option IV (%)</label>
+  <input type="number" id="bpsSellIV" step="0.1" placeholder="e.g. 25.3">
+
+  <br>
+
+  <button onclick="calculateBearPutSpread()">Calculate</button>
+</div>
+
+
 
         <div id="longStrangleFields" style="display:none">
-          <h3>🎯 Long Strangle Inputs</h3>
-          <label>Call Strike Price</label>
-          <input type="number" id="lsCallStrike">
-          <label>Call Premium Paid</label>
-          <input type="number" id="lsCallPremium">
-          <label>Call Option LTP</label>
-          <input type="number" id="lsCallLTP">
+  <h3>🎯 Long Strangle Inputs</h3>
 
-          <label>Put Strike Price</label>
-          <input type="number" id="lsPutStrike">
-          <label>Put Premium Paid</label>
-          <input type="number" id="lsPutPremium">
-          <label>Put Option LTP</label>
-          <input type="number" id="lsPutLTP">
+  <!-- 📈 Call Leg -->
+  <label>Call Strike Price</label>
+  <input type="number" id="lsCallStrike">
 
-          <button onclick="calculateLongStrangle()">Calculate</button>
-        </div>
+  <label>Call Premium Paid</label>
+  <input type="number" id="lsCallPremium">
+
+  <label>Call Option LTP</label>
+  <input type="number" id="lsCallLTP">
+
+  <label>Call Delta</label>
+  <input type="number" id="lsCallDelta" step="0.01">
+
+  <label>Call Theta</label>
+  <input type="number" id="lsCallTheta" step="0.01">
+
+  <label>Call Gamma</label>
+  <input type="number" id="lsCallGamma" step="0.01">
+
+  <!-- 🆕 Call IV -->
+  <label>Call Option IV (%)</label>
+  <input type="number" id="lsCallIV" step="0.1" placeholder="e.g. 26.7">
+
+  <br><br>
+
+  <!-- 📉 Put Leg -->
+  <label>Put Strike Price</label>
+  <input type="number" id="lsPutStrike">
+
+  <label>Put Premium Paid</label>
+  <input type="number" id="lsPutPremium">
+
+  <label>Put Option LTP</label>
+  <input type="number" id="lsPutLTP">
+
+  <label>Put Delta</label>
+  <input type="number" id="lsPutDelta" step="0.01">
+
+  <label>Put Theta</label>
+  <input type="number" id="lsPutTheta" step="0.01">
+
+  <label>Put Gamma</label>
+  <input type="number" id="lsPutGamma" step="0.01">
+
+  <!-- 🆕 Put IV -->
+  <label>Put Option IV (%)</label>
+  <input type="number" id="lsPutIV" step="0.1" placeholder="e.g. 28.9">
+
+  <br>
+
+  <button onclick="calculateLongStrangle()">Calculate</button>
+</div>
+
+
 
         <div id="longStraddleFields" style="display:none">
-          <h3>⚔️ Long Straddle Inputs</h3>
-          <label>Strike Price (Same for Call & Put)</label>
-          <input type="number" id="lsdStrike">
+  <h3>⚔️ Long Straddle Inputs</h3>
 
-          <label>Call Premium Paid</label>
-          <input type="number" id="lsdCallPremium">
-          <label>Call Option LTP</label>
-          <input type="number" id="lsdCallLTP">
+  <!-- 🎯 Common Strike -->
+  <label>Strike Price (Same for Call & Put)</label>
+  <input type="number" id="lsdStrike">
 
-          <label>Put Premium Paid</label>
-          <input type="number" id="lsdPutPremium">
-          <label>Put Option LTP</label>
-          <input type="number" id="lsdPutLTP">
+  <!-- 📈 Call Leg -->
+  <label>Call Premium Paid</label>
+  <input type="number" id="lsdCallPremium">
 
-          <button onclick="calculateLongStraddle()">Calculate</button>
-        </div>
+  <label>Call Option LTP</label>
+  <input type="number" id="lsdCallLTP">
+
+  <label>Call Delta</label>
+  <input type="number" id="lsdCallDelta" step="0.01">
+
+  <label>Call Theta</label>
+  <input type="number" id="lsdCallTheta" step="0.01">
+
+  <label>Call Gamma</label>
+  <input type="number" id="lsdCallGamma" step="0.01">
+
+  <!-- 🆕 Call IV -->
+  <label>Call Option IV (%)</label>
+  <input type="number" id="lsdCallIV" step="0.1" placeholder="e.g. 25.4">
+
+  <br><br>
+
+  <!-- 📉 Put Leg -->
+  <label>Put Premium Paid</label>
+  <input type="number" id="lsdPutPremium">
+
+  <label>Put Option LTP</label>
+  <input type="number" id="lsdPutLTP">
+
+  <label>Put Delta</label>
+  <input type="number" id="lsdPutDelta" step="0.01">
+
+  <label>Put Theta</label>
+  <input type="number" id="lsdPutTheta" step="0.01">
+
+  <label>Put Gamma</label>
+  <input type="number" id="lsdPutGamma" step="0.01">
+
+  <!-- 🆕 Put IV -->
+  <label>Put Option IV (%)</label>
+  <input type="number" id="lsdPutIV" step="0.1" placeholder="e.g. 26.1">
+
+  <br>
+
+  <button onclick="calculateLongStraddle()">Calculate</button>
+</div>
+
+
 
       </div>
     </div> <!-- End of .grid -->
@@ -240,6 +431,8 @@ h3 {
 
   <p><strong>🧠 Smart Exit:</strong></p>
   <pre id="exitSuggestion">--</pre>
+  <p><strong>📌 Final Outcome:</strong></p>
+  <pre id="finalOutcome">--</pre>
 </div>
 
 
@@ -366,80 +559,413 @@ function calculateLongCall() {
   const strike = +document.getElementById("longCallStrike").value;
   const premium = +document.getElementById("longCallPremium").value;
   const ltp = +document.getElementById("longCallLTP").value;
-  const qty = getQty(), spot = +document.getElementById("spotPrice").value, risk = +document.getElementById("maxRisk").value, dte = +document.getElementById("dte").innerText;
-  const cost = premium * qty, pnl = (ltp - premium) * qty, roi = ((pnl / cost) * 100).toFixed(2) + "%", breakeven = strike + premium;
-  updateOutput(breakeven.toFixed(2), "Unlimited", cost, roi, pnl, cost, getSmartExitMessage(pnl, risk, cost, dte, spot, strike, "call"));
+  const qty = getQty(), spot = +document.getElementById("spotPrice").value;
+  const risk = +document.getElementById("maxRisk").value;
+  const dte = +document.getElementById("dte").innerText;
+  const cost = premium * qty;
+  const pnl = (ltp - premium) * qty;
+  const roi = ((pnl / cost) * 100).toFixed(2) + "%";
+  const breakeven = strike + premium;
+
+  updateOutput(
+    breakeven.toFixed(2),
+    "Unlimited",
+    cost,
+    roi,
+    pnl,
+    cost,
+    getSmartExitMessage(pnl, risk, cost, dte, spot, strike, "call")
+  );
+
   setReversalExit("longCall", strike, spot, null, premium, null);
+
+  const delta = +document.getElementById("longCallDelta").value;
+  const theta = +document.getElementById("longCallTheta").value;
+  const gamma = +document.getElementById("longCallGamma").value;
+  const iv = +document.getElementById("longCallIV").value; // 🆕 NEW: Get IV
+
+  document.getElementById("finalOutcome").innerText = evaluateFinalOutcome(
+    delta,
+    theta,
+    gamma,
+    premium,
+    dte,
+    "Call",
+    iv // 🧠 Pass IV here
+  );
 }
+
 
 function calculateLongPut() {
   const strike = +document.getElementById("longPutStrike").value;
   const premium = +document.getElementById("longPutPremium").value;
   const ltp = +document.getElementById("longPutLTP").value;
-  const qty = getQty(), spot = +document.getElementById("spotPrice").value, risk = +document.getElementById("maxRisk").value, dte = +document.getElementById("dte").innerText;
-  const cost = premium * qty, pnl = (ltp - premium) * qty, roi = ((pnl / cost) * 100).toFixed(2) + "%", breakeven = strike - premium;
-  updateOutput(breakeven.toFixed(2), "Unlimited", cost, roi, pnl, cost, getSmartExitMessage(pnl, risk, cost, dte, spot, strike, "put"));
-  setReversalExit("longPut", strike, spot, null, premium, null); 
+  const qty = getQty();
+  const spot = +document.getElementById("spotPrice").value;
+  const risk = +document.getElementById("maxRisk").value;
+  const dte = +document.getElementById("dte").innerText;
+  const cost = premium * qty;
+  const pnl = (ltp - premium) * qty;
+  const roi = ((pnl / cost) * 100).toFixed(2) + "%";
+  const breakeven = strike - premium;
+
+  updateOutput(
+    breakeven.toFixed(2),
+    "Unlimited",
+    cost,
+    roi,
+    pnl,
+    cost,
+    getSmartExitMessage(pnl, risk, cost, dte, spot, strike, "put")
+  );
+
+  setReversalExit("longPut", strike, spot, null, premium, null);
+
+  const delta = +document.getElementById("longPutDelta").value;
+  const theta = +document.getElementById("longPutTheta").value;
+  const gamma = +document.getElementById("longPutGamma").value;
+  const iv = +document.getElementById("longPutIV").value; // 🆕 IV input
+
+  document.getElementById("finalOutcome").innerText = evaluateFinalOutcome(
+    delta,
+    theta,
+    gamma,
+    premium,
+    dte,
+    "Put",
+    iv // 🧠 Include IV for full evaluation
+  );
 }
+
 
 function calculateBullCallSpread() {
   const bStrike = +document.getElementById("bcsBuyStrike").value;
   const bPremium = +document.getElementById("bcsBuyPremium").value;
   const bLTP = +document.getElementById("bcsBuyLTP").value;
+  const bDelta = +document.getElementById("bcsBuyDelta").value;
+  const bTheta = +document.getElementById("bcsBuyTheta").value;
+  const bGamma = +document.getElementById("bcsBuyGamma").value;
+  const bIV = +document.getElementById("bcsBuyIV").value; // 🆕 Buy IV
+
   const sStrike = +document.getElementById("bcsSellStrike").value;
   const sPremium = +document.getElementById("bcsSellPremium").value;
   const sLTP = +document.getElementById("bcsSellLTP").value;
-  const qty = getQty(), spot = +document.getElementById("spotPrice").value, risk = +document.getElementById("maxRisk").value, dte = +document.getElementById("dte").innerText;
-  const cost = (bPremium - sPremium) * qty, pnl = ((bLTP - bPremium) - (sLTP - sPremium)) * qty;
+  const sDelta = +document.getElementById("bcsSellDelta").value;
+  const sTheta = +document.getElementById("bcsSellTheta").value;
+  const sGamma = +document.getElementById("bcsSellGamma").value;
+  const sIV = +document.getElementById("bcsSellIV").value; // 🆕 Sell IV
+
+  const qty = getQty();
+  const spot = +document.getElementById("spotPrice").value;
+  const risk = +document.getElementById("maxRisk").value;
+  const dte = +document.getElementById("dte").innerText;
+
+  const cost = (bPremium - sPremium) * qty;
+  const pnl = ((bLTP - bPremium) - (sLTP - sPremium)) * qty;
   const maxProfit = (sStrike - bStrike - (bPremium - sPremium)) * qty;
-  const roi = ((pnl / cost) * 100).toFixed(2) + "%", breakeven = bStrike + (bPremium - sPremium);
-  updateOutput(breakeven.toFixed(2), maxProfit.toFixed(2), cost, roi, pnl, cost, getSmartExitMessage(pnl, risk, cost, dte, spot, bStrike, "call"));
+  const roi = ((pnl / cost) * 100).toFixed(2) + "%";
+  const breakeven = bStrike + (bPremium - sPremium);
+
+  updateOutput(
+    breakeven.toFixed(2),
+    maxProfit.toFixed(2),
+    cost,
+    roi,
+    pnl,
+    cost,
+    getSmartExitMessage(pnl, risk, cost, dte, spot, bStrike, "call")
+  );
+
   setReversalExit("bullCallSpread", bStrike, spot, sStrike, bPremium, sPremium);
+
+  // 📊 Compute Net Greeks (Buy leg - Sell leg)
+  const netDelta = bDelta - sDelta;
+  const netTheta = bTheta - sTheta;
+  const netGamma = bGamma - sGamma;
+  const netIV = bIV - sIV; // 📉 Net IV added
+
+  document.getElementById("finalOutcome").innerText = evaluateFinalOutcome(
+    netDelta,
+    netTheta,
+    netGamma,
+    (bPremium - sPremium),
+    dte,
+    "Call",
+    netIV // ✅ IV passed for richer insight
+  );
 }
+
+
 
 function calculateBearPutSpread() {
   const bStrike = +document.getElementById("bpsBuyStrike").value;
   const bPremium = +document.getElementById("bpsBuyPremium").value;
   const bLTP = +document.getElementById("bpsBuyLTP").value;
+  const bDelta = +document.getElementById("bpsBuyDelta").value;
+  const bTheta = +document.getElementById("bpsBuyTheta").value;
+  const bGamma = +document.getElementById("bpsBuyGamma").value;
+  const bIV = +document.getElementById("bpsBuyIV").value; // ✅ Buy IV
+
   const sStrike = +document.getElementById("bpsSellStrike").value;
   const sPremium = +document.getElementById("bpsSellPremium").value;
   const sLTP = +document.getElementById("bpsSellLTP").value;
-  const qty = getQty(), spot = +document.getElementById("spotPrice").value, risk = +document.getElementById("maxRisk").value, dte = +document.getElementById("dte").innerText;
-  const cost = (bPremium - sPremium) * qty, pnl = ((bLTP - bPremium) - (sLTP - sPremium)) * qty;
+  const sDelta = +document.getElementById("bpsSellDelta").value;
+  const sTheta = +document.getElementById("bpsSellTheta").value;
+  const sGamma = +document.getElementById("bpsSellGamma").value;
+  const sIV = +document.getElementById("bpsSellIV").value; // ✅ Sell IV
+
+  const qty = getQty();
+  const spot = +document.getElementById("spotPrice").value;
+  const risk = +document.getElementById("maxRisk").value;
+  const dte = +document.getElementById("dte").innerText;
+
+  const cost = (bPremium - sPremium) * qty;
+  const pnl = ((bLTP - bPremium) - (sLTP - sPremium)) * qty;
   const maxProfit = (bStrike - sStrike - (bPremium - sPremium)) * qty;
-  const roi = ((pnl / cost) * 100).toFixed(2) + "%", breakeven = bStrike - (bPremium - sPremium);
-  updateOutput(breakeven.toFixed(2), maxProfit.toFixed(2), cost, roi, pnl, cost, getSmartExitMessage(pnl, risk, cost, dte, spot, bStrike, "put"));
+  const roi = ((pnl / cost) * 100).toFixed(2) + "%";
+  const breakeven = bStrike - (bPremium - sPremium);
+
+  updateOutput(
+    breakeven.toFixed(2),
+    maxProfit.toFixed(2),
+    cost,
+    roi,
+    pnl,
+    cost,
+    getSmartExitMessage(pnl, risk, cost, dte, spot, bStrike, "put")
+  );
+
   setReversalExit("bearPutSpread", bStrike, spot, sStrike, bPremium, sPremium);
+
+  // Compute Net Greeks
+  const netDelta = bDelta - sDelta;
+  const netTheta = bTheta - sTheta;
+  const netGamma = bGamma - sGamma;
+  const netIV = bIV - sIV; // ✅ Net IV added
+
+  // Display Greek metrics
+  document.getElementById("netDelta").innerText = netDelta.toFixed(2);
+  document.getElementById("netTheta").innerText = netTheta.toFixed(2);
+  document.getElementById("netGamma").innerText = netGamma.toFixed(2);
+
+  // ⬇️ IV passed to evaluation
+  document.getElementById("finalOutcome").innerText = evaluateFinalOutcome(
+    netDelta,
+    netTheta,
+    netGamma,
+    (bPremium - sPremium),
+    dte,
+    "Put",
+    netIV
+  );
 }
 
+
+
 function calculateLongStrangle() {
-  const cStrike = +document.getElementById("lsCallStrike").value, cPrem = +document.getElementById("lsCallPremium").value, cLTP = +document.getElementById("lsCallLTP").value;
-  const pStrike = +document.getElementById("lsPutStrike").value, pPrem = +document.getElementById("lsPutPremium").value, pLTP = +document.getElementById("lsPutLTP").value;
-  const qty = getQty(), spot = +document.getElementById("spotPrice").value, risk = +document.getElementById("maxRisk").value, dte = +document.getElementById("dte").innerText;
-  const cost = (cPrem + pPrem) * qty, pnl = ((cLTP - cPrem) + (pLTP - pPrem)) * qty, roi = ((pnl / cost) * 100).toFixed(2) + "%";
-  const lower = pStrike - pPrem, upper = cStrike + cPrem, breakeven = `Below ${lower.toFixed(2)} or Above ${upper.toFixed(2)}`;
-  updateOutput(breakeven, "Unlimited", cost, roi, pnl, cost * 1.5, getSmartExitMessage(pnl, risk, cost * 1.5, dte, spot, cStrike, "strangle"));
+  const cStrike = +document.getElementById("lsCallStrike").value;
+  const cPrem = +document.getElementById("lsCallPremium").value;
+  const cLTP = +document.getElementById("lsCallLTP").value;
+  const cDelta = +document.getElementById("lsCallDelta").value;
+  const cTheta = +document.getElementById("lsCallTheta").value;
+  const cGamma = +document.getElementById("lsCallGamma").value;
+  const cIV = +document.getElementById("lsCallIV").value; // ✅
+
+  const pStrike = +document.getElementById("lsPutStrike").value;
+  const pPrem = +document.getElementById("lsPutPremium").value;
+  const pLTP = +document.getElementById("lsPutLTP").value;
+  const pDelta = +document.getElementById("lsPutDelta").value;
+  const pTheta = +document.getElementById("lsPutTheta").value;
+  const pGamma = +document.getElementById("lsPutGamma").value;
+  const pIV = +document.getElementById("lsPutIV").value; // ✅
+
+  const qty = getQty();
+  const spot = +document.getElementById("spotPrice").value;
+  const risk = +document.getElementById("maxRisk").value;
+  const dte = +document.getElementById("dte").innerText;
+
+  const cost = (cPrem + pPrem) * qty;
+  const pnl = ((cLTP - cPrem) + (pLTP - pPrem)) * qty;
+  const roi = ((pnl / cost) * 100).toFixed(2) + "%";
+  const lower = pStrike - pPrem;
+  const upper = cStrike + cPrem;
+  const breakeven = `Below ${lower.toFixed(2)} or Above ${upper.toFixed(2)}`;
+
+  updateOutput(
+    breakeven,
+    "Unlimited",
+    cost,
+    roi,
+    pnl,
+    cost * 1.5,
+    getSmartExitMessage(pnl, risk, cost * 1.5, dte, spot, cStrike, "strangle")
+  );
+
   setReversalExit("longStrangle", pStrike, spot, cStrike, pPrem, cPrem);
+
+  // Net Greeks
+  const netDelta = cDelta + pDelta;
+  const netTheta = cTheta + pTheta;
+  const netGamma = cGamma + pGamma;
+  const netIV = (cIV + pIV) / 2; // ✅ average IV
+
+  document.getElementById("finalOutcome").innerText =
+    evaluateFinalOutcome(netDelta, netTheta, netGamma, (cPrem + pPrem), dte, "Strangle", netIV);
 }
+
 
 function calculateLongStraddle() {
   const strike = +document.getElementById("lsdStrike").value;
-  const cPrem = +document.getElementById("lsdCallPremium").value, cLTP = +document.getElementById("lsdCallLTP").value;
-  const pPrem = +document.getElementById("lsdPutPremium").value, pLTP = +document.getElementById("lsdPutLTP").value;
-  const qty = getQty(), spot = +document.getElementById("spotPrice").value, risk = +document.getElementById("maxRisk").value, dte = +document.getElementById("dte").innerText;
-  const cost = (cPrem + pPrem) * qty, pnl = ((cLTP - cPrem) + (pLTP - pPrem)) * qty;
+
+  const cPrem = +document.getElementById("lsdCallPremium").value;
+  const cLTP = +document.getElementById("lsdCallLTP").value;
+  const cDelta = +document.getElementById("lsdCallDelta").value;
+  const cTheta = +document.getElementById("lsdCallTheta").value;
+  const cGamma = +document.getElementById("lsdCallGamma").value;
+  const cIV = +document.getElementById("lsdCallIV").value; // ✅ Call IV
+
+  const pPrem = +document.getElementById("lsdPutPremium").value;
+  const pLTP = +document.getElementById("lsdPutLTP").value;
+  const pDelta = +document.getElementById("lsdPutDelta").value;
+  const pTheta = +document.getElementById("lsdPutTheta").value;
+  const pGamma = +document.getElementById("lsdPutGamma").value;
+  const pIV = +document.getElementById("lsdPutIV").value; // ✅ Put IV
+
+  const qty = getQty();
+  const spot = +document.getElementById("spotPrice").value;
+  const risk = +document.getElementById("maxRisk").value;
+  const dte = +document.getElementById("dte").innerText;
+
+  const cost = (cPrem + pPrem) * qty;
+  const pnl = ((cLTP - cPrem) + (pLTP - pPrem)) * qty;
   const roi = ((pnl / cost) * 100).toFixed(2) + "%";
-  const lower = strike - (cPrem + pPrem), upper = strike + (cPrem + pPrem), breakeven = `Below ${lower.toFixed(2)} or Above ${upper.toFixed(2)}`;
-  updateOutput(breakeven, "Unlimited", cost, roi, pnl, cost * 1.5, getSmartExitMessage(pnl, risk, cost * 1.5, dte, spot, strike, "straddle"));
+  const lower = strike - (cPrem + pPrem);
+  const upper = strike + (cPrem + pPrem);
+  const breakeven = `Below ${lower.toFixed(2)} or Above ${upper.toFixed(2)}`;
+
+  updateOutput(
+    breakeven,
+    "Unlimited",
+    cost,
+    roi,
+    pnl,
+    cost * 1.5,
+    getSmartExitMessage(pnl, risk, cost * 1.5, dte, spot, strike, "straddle")
+  );
+
   setReversalExit("longStraddle", strike, spot, null, cPrem, pPrem);
+
+  // Net Greeks
+  const netDelta = cDelta + pDelta;
+  const netTheta = cTheta + pTheta;
+  const netGamma = cGamma + pGamma;
+  const netIV = (cIV + pIV) / 2; // ✅ average IV
+
+  document.getElementById("finalOutcome").innerText =
+    evaluateFinalOutcome(netDelta, netTheta, netGamma, (cPrem + pPrem), dte, "Straddle", netIV);
 }
 
+
+function evaluateFinalOutcome(delta, theta, gamma, premium, dte, optionType = "Call", iv = null) {
+  const absDelta = Math.abs(delta), absTheta = Math.abs(theta), absGamma = Math.abs(gamma);
+  let tradeAdvice = "";
+
+  const formatter = new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 2,
+  });
+
+  // 💹 Profit potential in next 2 days
+  const willMakeMoney =
+    `💹 Will my trade make money in next 2 days?\n→ Insight: Based on current delta and theta, this position shows moderate potential responsiveness to market moves over the next 2 days.`;
+
+  // ⚠️ Value loss risk without movement
+  const willLoseFast =
+    `⚠️ Will this trade lose value fast if market doesn’t move?\n→ Insight: This position may experience faster time decay if price stays flat, especially with low delta and higher theta.`;
+
+  // 🚀 Estimated move for profitability
+  const requiredMove = delta !== 0 ? premium / absDelta : 0;
+  const moveDirection = optionType === "Call" ? "↑" : optionType === "Put" ? "↓" : "↕";
+  const howFarToProfit = `🚀 How far should price move for profit?\n→ Insight: Spot would need to move ${moveDirection} approximately ${formatter.format(requiredMove)} to potentially cover the premium, based on current delta sensitivity.`;
+
+  // 🧠 Hold or exit consideration
+  const holdOrExit =
+    `🧠 Should I hold or exit before expiry?\n→ Insight: This setup currently shows ${absDelta > 0.4 && absTheta < 6 ? "momentum alignment with relatively controlled decay" : dte <= 2 && absDelta < 0.3 ? "time decay risk as expiry nears" : "mixed signals"}; monitoring position closely is advised.`;
+
+  // 🔁 Roll suggestion
+  const shouldRoll =
+    `🔁 Should I roll my position?\n→ Insight: If days to expiry are limited and delta is low, rolling to a later expiry could be considered to manage time risk.`;
+
+  // 💎 Breakout vs theta trap
+  const breakoutOrTrap =
+    `💎 Is this a breakout bet or theta trap?\n→ Insight: ${
+      absGamma > 0.1 && absTheta < 5
+        ? "Setup may favour directional breakout sensitivity with lower time decay."
+        : absGamma < 0.05 && absTheta > 7
+        ? "Setup may be prone to premium erosion if price remains rangebound."
+        : "Current setup shows balanced risk without strong directional or decay bias."
+    }`;
+
+  // 🌡️ IV Context: Added here
+  let ivInsight = "";
+  if (iv !== null && !isNaN(iv)) {
+    const ivLevel = parseFloat(iv);
+    if (ivLevel > 40) {
+      ivInsight = `🌡️ IV Insight:\n→ Current IV (${ivLevel}%) is HIGH. Premiums are expensive — good for sellers, risky for buyers unless expecting major move or IV expansion.`;
+    } else if (ivLevel < 18) {
+      ivInsight = `🌡️ IV Insight:\n→ Current IV (${ivLevel}%) is LOW. Premiums are cheap — beneficial for long premium strategies; limited Vega payoff.`;
+    } else {
+      ivInsight = `🌡️ IV Insight:\n→ Current IV (${ivLevel}%) is moderate — fair pricing. Trade edge will depend on direction or time bias.`;
+    }
+
+    // Optional IV & Vega interaction
+    if (ivLevel < 20 && absGamma > 0.08) {
+      ivInsight += `\n→ Low IV with high gamma may yield explosive moves if breakout occurs.`;
+    } else if (ivLevel > 35 && absTheta > 6) {
+      ivInsight += `\n→ High IV and high theta — risky for buyers; time decay will erode fast unless strong price action follows.`;
+    }
+  }
+
+  // 🧠 Final trade setup commentary (risk-aware)
+  if (dte <= 2 && absDelta < 0.3) {
+    tradeAdvice = "🔁 Trade Setup: With expiry nearing and limited price sensitivity, this position may benefit from being evaluated for adjustments.";
+  } else if (absDelta < 0.3 && absTheta > 8) {
+    tradeAdvice = "⚠️ Trade Setup: High decay and low responsiveness — consider managing exposure based on risk appetite.";
+  } else if (absGamma > 0.1 && absTheta < 5) {
+    tradeAdvice = "🚀 Trade Setup: Shows characteristics of breakout potential; appropriate only for high-risk strategies.";
+  } else if (absGamma < 0.05 && absTheta > 7) {
+    tradeAdvice = "😓 Trade Setup: Elevated time decay risk — may underperform without significant move.";
+  } else if (absDelta > 0.4 && absTheta < 4) {
+    tradeAdvice = "✅ Trade Setup: Currently shows alignment with underlying movement; regular monitoring advised.";
+  } else {
+    tradeAdvice = "🧠 Trade Setup: Mixed signals — neither clear momentum nor decay dominance. Consider evaluating risk/reward.";
+  }
+
+  return [
+    willMakeMoney,
+    willLoseFast,
+    howFarToProfit,
+    holdOrExit,
+    shouldRoll,
+    breakoutOrTrap,
+    ivInsight,
+    tradeAdvice
+  ].join("\n\n");
+}
+
+
 function resetCalculator() {
-  document.querySelectorAll("input").forEach(el => { el.value = ""; el.style.border = "none"; });
+  document.querySelectorAll("input").forEach(el => { 
+    el.value = ""; 
+    el.style.border = "none"; 
+  });
   document.getElementById("strategyType").value = "";
   toggleStrategyFields();
   updateOutput("--", "--", 0, "--", 0, 0, "--");
   document.getElementById("dte").innerText = "0";
+  document.getElementById("exitSuggestion").innerText = "--";
+  document.getElementById("finalOutcome").innerText = "--";
 }
 </script>
 </body>
