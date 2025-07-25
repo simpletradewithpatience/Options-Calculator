@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -522,33 +523,51 @@ function updateOutput(breakeven, maxProfit, maxLoss, roi, pnl, target, exitMsg) 
   document.getElementById("targetAuto").innerText = target.toFixed(2);
   document.getElementById("exitSuggestion").innerText = exitMsg;
 
-  // Calculate and display R:R
-  let rr = isFinite(maxProfit) ? (parseFloat(maxProfit) / maxLoss) : Infinity;
-  let rrRounded = isFinite(rr) ? Math.round(rr * 100) / 100 : Infinity; // round to 2 decimals
-  let rrText = isFinite(rrRounded) ? `1 : ${rrRounded}` : "1 : ∞";
+  calculateRR(maxProfit, maxLoss);
+  function calculateRR(maxProfit, maxLoss) {
+  let rr, rrRounded, rrText, rrVerdict, rrColor;
 
-  let rrVerdict = "";
-  let rrColor = "";
+  if ((maxLoss === 0 || maxLoss === undefined) && isFinite(maxProfit)) {
+    rr = Infinity;
+    rrText = "∞";
+    rrVerdict = "♾️ Zero Risk Trade (Max Loss = 0)";
+    rrColor = "#00e5ff"; // cyan
+  } else if (isFinite(maxLoss) && !isFinite(maxProfit)) {
+    rr = Infinity;
+    rrText = "∞";
+    rrVerdict = "🚀 Unlimited Reward Potential";
+    rrColor = "#03a9f4"; // blue
+  } else if (maxLoss && maxLoss !== 0 && isFinite(maxProfit)) {
+    rr = parseFloat(maxProfit) / maxLoss;
+    rrRounded = Math.round(rr * 100) / 100;
+    rrText = `1 : ${rrRounded}`;
 
-if (rr > 1.5) {
-  rrVerdict = "💎 Excellent R:R Trade";
-  rrColor = "#00e676"; // light green
-} else if (rr > 1) {
-  rrVerdict = "✅ Favourable Trade";
-  rrColor = "#4caf50"; // green
-} else {
-  rrVerdict = "⚠️ Unfavourable Trade";
-  rrColor = "#ff9800"; // orange
-}
-  
+    if (rr > 5) {
+      rrVerdict = "💎 Ultra R:R Opportunity";
+      rrColor = "#00e676"; // neon green
+    } else if (rr > 1.5) {
+      rrVerdict = "✅ Excellent R:R Trade";
+      rrColor = "#4caf50"; // green
+    } else if (rr > 1) {
+      rrVerdict = "🟡 Acceptable Risk/Reward";
+      rrColor = "#ffc107"; // amber
+    } else {
+      rrVerdict = "🔻 Poor R:R — Risk > Reward";
+      rrColor = "#ff5722"; // deep orange
+    }
+  } else {
+    rrText = "--";
+    rrVerdict = "⚠️ Insufficient Data";
+    rrColor = "#9e9e9e"; // grey
+  }
+
   document.getElementById("rrRatio").innerText = rrText;
   document.getElementById("rrVerdict").innerText = rrVerdict;
   document.getElementById("rrVerdict").style.color = rrColor;
 
-  // Optional visual on output box
-  document.querySelector(".output").style.borderColor = rrColor;
-
-
+  const outputBox = document.querySelector(".output");
+  if (outputBox) outputBox.style.borderColor = rrColor;
+}
 
   // Color ROI and PnL
   document.getElementById("roi").style.color = pnl >= 0 ? "#4caf50" : "#f44336";
@@ -867,8 +886,14 @@ function calculateLongStraddle() {
 
 
 function evaluateFinalOutcome(delta, theta, gamma, premium, dte, optionType = "Call", iv = null) {
-  const absDelta = Math.abs(delta), absTheta = Math.abs(theta), absGamma = Math.abs(gamma);
-  let tradeAdvice = "";
+  function isValid(val) {
+    return val !== "" && val !== null && val !== undefined && !isNaN(val) && Number(val) !== 0;
+  }
+
+  const absDelta = isValid(delta) ? Math.abs(Number(delta)) : null;
+  const absTheta = isValid(theta) ? Math.abs(Number(theta)) : null;
+  const absGamma = isValid(gamma) ? Math.abs(Number(gamma)) : null;
+  const validIV = isValid(iv) ? Number(iv) : null;
 
   const formatter = new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -876,84 +901,108 @@ function evaluateFinalOutcome(delta, theta, gamma, premium, dte, optionType = "C
     maximumFractionDigits: 2,
   });
 
-  // 💹 Profit potential in next 2 days
-  const willMakeMoney =
-    `💹 Will my trade make money in next 2 days?\n→ Insight: Based on current delta and theta, this position shows moderate potential responsiveness to market moves over the next 2 days.`;
+  // 1. Will it make money in 2 days?
+  const willMakeMoney = (absDelta && absTheta)
+    ? `💹 Will my trade make money in next 2 days?\n→ Insight: Based on current delta and theta, this position shows moderate potential responsiveness to market moves over the next 2 days.`
+    : `💹 Will my trade make money in next 2 days?\n→ Insight: NA (Delta or Theta missing/zero)`;
 
-  // ⚠️ Value loss risk without movement
-  const willLoseFast =
-    `⚠️ Will this trade lose value fast if market doesn’t move?\n→ Insight: This position may experience faster time decay if price stays flat, especially with low delta and higher theta.`;
+  // 2. Will it lose value fast?
+  const willLoseFast = (absDelta && absTheta)
+    ? `⚠️ Will this trade lose value fast if market doesn’t move?\n→ Insight: This position may experience faster time decay if price stays flat, especially with low delta and higher theta.`
+    : `⚠️ Will this trade lose value fast if market doesn’t move?\n→ Insight: NA (Delta or Theta missing/zero)`;
 
-  // 🚀 Estimated move for profitability
-  const requiredMove = delta !== 0 ? premium / absDelta : 0;
+  // 3. How far should price move for profit?
+  const requiredMove = absDelta ? premium / absDelta : null;
   const moveDirection = optionType === "Call" ? "↑" : optionType === "Put" ? "↓" : "↕";
-  const howFarToProfit = `🚀 How far should price move for profit?\n→ Insight: Spot would need to move ${moveDirection} approximately ${formatter.format(requiredMove)} to potentially cover the premium, based on current delta sensitivity.`;
+  const howFarToProfit = requiredMove
+    ? `🚀 How far should price move for profit?\n→ Insight: Spot would need to move ${moveDirection} approximately ${formatter.format(requiredMove)} to potentially cover the premium.`
+    : `🚀 How far should price move for profit?\n→ Insight: NA (Delta missing or zero)`;
 
-  // 🧠 Hold or exit consideration
-  const holdOrExit =
-    `🧠 Should I hold or exit before expiry?\n→ Insight: This setup currently shows ${absDelta > 0.4 && absTheta < 6 ? "momentum alignment with relatively controlled decay" : dte <= 2 && absDelta < 0.3 ? "time decay risk as expiry nears" : "mixed signals"}; monitoring position closely is advised.`;
+  // 4. Hold or exit
+  const holdOrExit = (absDelta && absTheta)
+    ? `🧠 Should I hold or exit before expiry?\n→ Insight: ${
+        absDelta > 0.4 && absTheta < 6 ? "Momentum aligned with controlled decay."
+        : dte <= 2 && absDelta < 0.3 ? "Time decay risk as expiry nears."
+        : "Mixed signals."
+      }`
+    : `🧠 Should I hold or exit before expiry?\n→ Insight: NA (Delta or Theta missing/zero)`;
 
-  // 🔁 Roll suggestion
-  const shouldRoll =
-    `🔁 Should I roll my position?\n→ Insight: If days to expiry are limited and delta is low, rolling to a later expiry could be considered to manage time risk.`;
+  // 5. Should I roll?
+  const shouldRoll = absDelta
+    ? `🔁 Should I roll my position?\n→ Insight: If days to expiry are limited and delta is low, rolling may help manage risk.`
+    : `🔁 Should I roll my position?\n→ Insight: NA (Delta missing or zero)`;
 
-  // 💎 Breakout vs theta trap
-  const breakoutOrTrap =
-    `💎 Is this a breakout bet or theta trap?\n→ Insight: ${
-      absGamma > 0.1 && absTheta < 5
-        ? "Setup may favour directional breakout sensitivity with lower time decay."
-        : absGamma < 0.05 && absTheta > 7
-        ? "Setup may be prone to premium erosion if price remains rangebound."
-        : "Current setup shows balanced risk without strong directional or decay bias."
-    }`;
+  // 6. Breakout bet or theta trap?
+  const breakoutOrTrap = (absGamma && absTheta)
+    ? `💎 Is this a breakout bet or theta trap?\n→ Insight: ${
+        absGamma > 0.1 && absTheta < 5 ? "Setup may favour breakout moves with less decay."
+        : absGamma < 0.05 && absTheta > 7 ? "Setup may suffer from time decay in rangebound conditions."
+        : "Balanced — neither strong breakout nor decay risk."
+      }`
+    : `💎 Is this a breakout bet or theta trap?\n→ Insight: NA (Gamma or Theta missing/zero)`;
 
-  // 🌡️ IV Context: Added here
+  // 7. IV Insight
   let ivInsight = "";
-  if (iv !== null && !isNaN(iv)) {
-    const ivLevel = parseFloat(iv);
-    if (ivLevel > 40) {
-      ivInsight = `🌡️ IV Insight:\n→ Current IV (${ivLevel}%) is HIGH. Premiums are expensive — good for sellers, risky for buyers unless expecting major move or IV expansion.`;
-    } else if (ivLevel < 18) {
-      ivInsight = `🌡️ IV Insight:\n→ Current IV (${ivLevel}%) is LOW. Premiums are cheap — beneficial for long premium strategies; limited Vega payoff.`;
+  if (validIV !== null) {
+    ivInsight = `🌡️ IV Insight:\n→ Current IV (${validIV}%) is ${validIV > 40 ? "HIGH" : validIV < 18 ? "LOW" : "MODERATE"}. `;
+
+    if (validIV > 40) {
+      ivInsight += "Premiums expensive — good for sellers, risky for buyers.";
+    } else if (validIV < 18) {
+      ivInsight += "Premiums cheap — good for long premium strategies.";
     } else {
-      ivInsight = `🌡️ IV Insight:\n→ Current IV (${ivLevel}%) is moderate — fair pricing. Trade edge will depend on direction or time bias.`;
+      ivInsight += "Fair pricing, edge depends on setup.";
     }
 
-    // Optional IV & Vega interaction
-    if (ivLevel < 20 && absGamma > 0.08) {
-      ivInsight += `\n→ Low IV with high gamma may yield explosive moves if breakout occurs.`;
-    } else if (ivLevel > 35 && absTheta > 6) {
-      ivInsight += `\n→ High IV and high theta — risky for buyers; time decay will erode fast unless strong price action follows.`;
+    if (absGamma && absTheta) {
+      if (validIV < 20 && absGamma > 0.08) {
+        ivInsight += `\n→ Low IV + High Gamma = potential for breakout explosion.`;
+      } else if (validIV > 35 && absTheta > 6) {
+        ivInsight += `\n→ High IV + High Theta = risky for buyers unless strong move comes.`;
+      }
     }
+  } else {
+    ivInsight = `🌡️ IV Insight:\n→ NA (IV missing or zero — can't provide insight).`;
   }
 
-  // 🧠 Final trade setup commentary (risk-aware)
-  if (dte <= 2 && absDelta < 0.3) {
-    tradeAdvice = "🔁 Trade Setup: With expiry nearing and limited price sensitivity, this position may benefit from being evaluated for adjustments.";
+  // 8. Trade Setup Summary
+  let tradeAdvice = "";
+  if (!absDelta || !absTheta || !absGamma) {
+    tradeAdvice = "🧠 Trade Setup: NA — not enough Greek data to analyze setup.";
+  } else if (dte <= 2 && absDelta < 0.3) {
+    tradeAdvice = "🔁 Trade Setup: Expiry near + low delta — consider adjustments.";
   } else if (absDelta < 0.3 && absTheta > 8) {
-    tradeAdvice = "⚠️ Trade Setup: High decay and low responsiveness — consider managing exposure based on risk appetite.";
+    tradeAdvice = "⚠️ Trade Setup: High decay + low responsiveness — manage exposure.";
   } else if (absGamma > 0.1 && absTheta < 5) {
-    tradeAdvice = "🚀 Trade Setup: Shows characteristics of breakout potential; appropriate only for high-risk strategies.";
+    tradeAdvice = "🚀 Trade Setup: Breakout-biased — may suit high-risk styles.";
   } else if (absGamma < 0.05 && absTheta > 7) {
-    tradeAdvice = "😓 Trade Setup: Elevated time decay risk — may underperform without significant move.";
+    tradeAdvice = "😓 Trade Setup: Likely theta trap — low gamma, high decay.";
   } else if (absDelta > 0.4 && absTheta < 4) {
-    tradeAdvice = "✅ Trade Setup: Currently shows alignment with underlying movement; regular monitoring advised.";
+    tradeAdvice = "✅ Trade Setup: Aligned with price — favorable momentum.";
   } else {
-    tradeAdvice = "🧠 Trade Setup: Mixed signals — neither clear momentum nor decay dominance. Consider evaluating risk/reward.";
+    tradeAdvice = "🧠 Trade Setup: Mixed signals — reevaluate risk/reward.";
   }
 
   return [
+    "📌 Final Outcome:",
+    "",
     willMakeMoney,
+    "",
     willLoseFast,
+    "",
     howFarToProfit,
+    "",
     holdOrExit,
+    "",
     shouldRoll,
+    "",
     breakoutOrTrap,
+    "",
     ivInsight,
+    "",
     tradeAdvice
-  ].join("\n\n");
+  ].join("\n");
 }
-
 
 function resetCalculator() {
   document.querySelectorAll("input").forEach(el => { 
